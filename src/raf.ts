@@ -1,11 +1,11 @@
 const getRequestAnimationFrame = () => {
   if (typeof requestAnimationFrame !== 'undefined') {
-    return requestAnimationFrame;
+    return window.requestAnimationFrame.bind(window);
   } else {
     const dummyRequestAnimationFrame = function() {
         let lastTime = 0;
 
-        return function (callback: (timestamp: number) => void) {
+        return function (callback: Callback) {
             const currentTime = new Date().getTime();
             const timeout = Math.max(0, 16 - (currentTime - lastTime));
             const id = window.setTimeout(function() {
@@ -21,3 +21,6 @@ const getRequestAnimationFrame = () => {
 };
 
 export const raf = getRequestAnimationFrame();
+
+
+type Callback = (timestamp: number) => void;
