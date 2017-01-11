@@ -1,0 +1,38 @@
+{
+  "name": "futura-dom",
+  "version": "0.1.0",
+  "description": "DOM implementation for futura",
+  "main": "index.js",
+  "types": "dist/typings/index.d.ts",
+  "scripts": {
+    "build": "tsc --version && tsc --project \"./src\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/futurajs/futura-dom.git"
+  },
+  "keywords": [
+    "state-machine",
+    "fsm",
+    "flux",
+    "redux",
+    "futura",
+    "ui"
+  ],
+  "author": {
+    "name": "Ali Sabil",
+    "email": "ali.sabil@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/futurajs/futura-dom/issues"
+  },
+  "homepage": "https://github.com/futurajs/futura-dom",
+  "dependencies": {
+    "futura": "^0.1.0",
+    "snabbdom": "^0.5.4"
+  },
+  "devDependencies": {
+    "typescript": "^2.1.4"
+  }
+}
