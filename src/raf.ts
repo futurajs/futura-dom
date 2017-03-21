@@ -22,5 +22,4 @@ const getRequestAnimationFrame = () => {
 
 export const raf = getRequestAnimationFrame();
 
-
 type Callback = (timestamp: number) => void;

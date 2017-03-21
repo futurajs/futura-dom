@@ -1,6 +1,6 @@
 {
   "name": "futura-dom",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "DOM implementation for futura",
   "main": "index.js",
   "types": "lib/typings/index.d.ts",
@@ -34,7 +34,7 @@
   "homepage": "https://github.com/futurajs/futura-dom",
   "dependencies": {
     "futura": "^0.1.1",
-    "snabbdom": "^0.5.4"
+    "snabbdom": "^0.6.7"
   },
   "devDependencies": {
     "typescript": "^2.1.4"
