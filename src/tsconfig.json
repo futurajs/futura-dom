@@ -6,12 +6,11 @@
     "moduleResolution": "node",
     "noImplicitAny": true,
     "noImplicitReturns": true,
-    "noImplicitThis": false,
+    "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "outDir": "../lib",
-    "strictNullChecks": false,
-    "suppressImplicitAnyIndexErrors": true,
+    "strictNullChecks": true,
     "target": "es5"
   }
 }

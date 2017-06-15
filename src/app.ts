@@ -1,7 +1,6 @@
 import { Automaton, HasTransitions } from 'futura';
 import { Renderer, VNode } from './dom';
 
-
 export class App<State extends HasTransitions<State, Events, Services>, Events, Services> {
   private readonly automaton: Automaton<State, Events, Services>;
   private readonly notify: Notify<Events>;
@@ -27,7 +26,7 @@ export interface Notify<Events> {
 }
 
 export interface View<State, Events> {
-  (state: State, notify: Notify<Events>): VNode | null | undefined;
+  (state: State, notify: Notify<Events>): VNode;
 }
 
 export interface StateInit<State, Services> {

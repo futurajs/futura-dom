@@ -1,12 +1,13 @@
 {
   "name": "futura-dom",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "DOM implementation for futura",
   "main": "index.js",
   "types": "lib/typings/index.d.ts",
   "scripts": {
+    "prebuild": "rimraf lib/",
     "build": "tsc --project \"./src\"",
-    "prepublish": "npm run build"
+    "prepack": "npm run build"
   },
   "files": [
     "lib"
@@ -33,10 +34,11 @@
   },
   "homepage": "https://github.com/futurajs/futura-dom",
   "dependencies": {
-    "futura": "^0.1.1",
-    "snabbdom": "^0.6.7"
+    "futura": "^0.1.2",
+    "mostly-dom": "^3.4.0"
   },
   "devDependencies": {
-    "typescript": "^2.1.4"
+    "rimraf": "^2.6.1",
+    "typescript": "^2.3.4"
   }
 }
