@@ -34,8 +34,7 @@
   },
   "homepage": "https://github.com/futurajs/futura-dom",
   "dependencies": {
-    "futura": "^0.1.2",
-    "mostly-dom": "^3.4.0"
+    "mostly-dom": "^3.5.0"
   },
   "devDependencies": {
     "rimraf": "^2.6.1",

@@ -1,10 +1,3 @@
-import { elementToVNode, init } from 'mostly-dom';
-import { ElementVNode, VNode as VirtualNode, VNodeEvents, VNodeProps } from 'mostly-dom';
-
-import { raf } from './raf';
-
-// API
-
 export {
   a, abbr, acronym, address, applet, area, article, aside, audio, b, base,
   basefont, bdi, bdo, bgsound, big, blink, blockquote, body, br, button,
@@ -21,44 +14,6 @@ export {
   tfoot, th, time, title, tr, track, tt, u, ul, video, wbr, xmp
 } from 'mostly-dom';
 
-export { h } from 'mostly-dom';
-
-export const when = (predicate: boolean, view: () => VNode | null) =>
-  predicate ? view() : null;
-
-export class Renderer {
-  private vnode0: ElementVNode;
-  private vnode1: VNode | null;
-  private refreshScheduled: boolean = false;
-
-  constructor(container: Element, vnode: VNode) {
-    this.vnode0 = elementToVNode(container);
-    this.vnode1 = vnode;
-
-    this.refresh();
-  }
-
-  render(vnode: VNode) {
-    this.vnode1 = vnode;
-    if (!this.refreshScheduled) {
-        this.refreshScheduled = true;
-        raf(this.refresh);
-    }
-  }
-
-  private refresh = () => {
-    this.refreshScheduled = false;
-    if (this.vnode1) {
-      this.vnode0 = patch(this.vnode0, this.vnode1);
-      this.vnode1 = null;
-    }
-  }
-}
-
-// Types
-
-export type VNode = VirtualNode<Element, VNodeProps<Element, VNodeEvents<Element, ElementEventMap>>>;
-
-// Internals
-
-const patch = init([]);
+export {
+  VNode
+} from './types';

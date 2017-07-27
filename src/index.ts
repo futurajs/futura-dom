@@ -1,2 +1,1 @@
-export { App } from './app';
-export * from './dom';
+export * from './program';
