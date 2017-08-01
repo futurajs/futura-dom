@@ -7,7 +7,7 @@
   "scripts": {
     "prebuild": "rimraf lib/",
     "build": "tsc --project \"./src\"",
-    "prepack": "npm run build"
+    "prepare": "npm run build"
   },
   "files": [
     "lib"
