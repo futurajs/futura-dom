@@ -21,6 +21,7 @@ export class Program<State, Event> {
     this.event$.subscribe((event) => {
       const { state, commands = [] } = update(this.state$.value, event);
 
+      this.state$.value = state;
       this.services.handleCommands(commands);
       this.services.updateSubscriptions(subscriptions(state));
     });
@@ -38,7 +39,7 @@ export class Program<State, Event> {
 }
 
 class Services<Event> {
-  private readonly services: Array<{type: any, instance: Service<Event>}>;
+  private readonly services: Array<{ type: ServiceClass<Event>, instance: Service }>;
   private readonly notify: Notify<Event>;
 
   constructor(notify: Notify<Event>) {
@@ -67,15 +68,15 @@ class Services<Event> {
     });
   }
 
-  private service(type: any): Service<Event> {
+  private service(Type: ServiceClass<Event>): Service {
     for (let i = 0; i < this.services.length; i++) {
       const service = this.services[i];
-      if (service.type === type) {
+      if (service.type === Type) {
         return service.instance;
       }
     }
-    const service = new type(this.notify);
-    this.services.push({ type, instance: service });
+    const service = new Type(this.notify);
+    this.services.push({ type: Type, instance: service });
     return service;
   }
 }
@@ -103,20 +104,23 @@ export interface UpdateResult<State, Event> {
 
 //// Service
 
-export interface Service<Event> {
-  new(notify: Notify<Event>): Service<Event>;
+export interface Service {
   handleCommand(command: any): void;
   updateSubscriptions(subscriptions: ReadonlyArray<any>): void;
 }
 
+export interface ServiceClass<Event> {
+  new(notify: Notify<Event>): Service
+}
+
 export interface Command<Event> {
-  service: Service<Event>;
+  service: ServiceClass<Event>;
   desc: any;
-  map<OtherEvent>(func: (event: Event) => OtherEvent): Subscription<OtherEvent>;
+  // map<OtherEvent>(func: (event: Event) => OtherEvent): Subscription<OtherEvent>;
 }
 
 export interface Subscription<Event> {
-  service: Service<Event>;
+  service: ServiceClass<Event>;
   desc: any;
-  map<OtherEvent>(func: (event: Event) => OtherEvent): Subscription<OtherEvent>;
+  // map<OtherEvent>(func: (event: Event) => OtherEvent): Subscription<OtherEvent>;
 }

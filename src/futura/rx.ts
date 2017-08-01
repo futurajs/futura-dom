@@ -51,6 +51,11 @@ export class Value<T> extends Signal<T> {
     this._value = newValue;
     this.emit(newValue);
   }
+
+  public subscribe(subscriber: Subscriber<T>): Subscription {
+    subscriber(this.value);
+    return super.subscribe(subscriber);
+  }
 }
 
 export interface Subscriber<T> {
