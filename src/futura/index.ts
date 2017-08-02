@@ -39,7 +39,7 @@ export class Program<State, Event> {
 }
 
 class Services<Event> {
-  private readonly services: Array<{ type: ServiceClass<Event>, instance: Service }>;
+  private readonly services: Array<{ type: ServiceClass<Event, any, any>, instance: Service<any, any> }>;
   private readonly notify: Notify<Event>;
 
   constructor(notify: Notify<Event>) {
@@ -47,14 +47,14 @@ class Services<Event> {
     this.notify = notify;
   }
 
-  public handleCommands(commands: ReadonlyArray<Command<Event>>) {
+  public handleCommands(commands: ReadonlyArray<Command<Event, any>>) {
     commands.forEach((command) => {
       const service = this.service(command.service);
       service.handleCommand(command.command);
     });
   }
 
-  public updateSubscriptions(subscriptions: ReadonlyArray<Subscription<Event>>) {
+  public updateSubscriptions(subscriptions: ReadonlyArray<Subscription<Event, any>>) {
     // Ensure all services are setup
     subscriptions.forEach((subscription) => {
       this.service(subscription.service);
@@ -68,7 +68,7 @@ class Services<Event> {
     });
   }
 
-  private service(Type: ServiceClass<Event>): Service {
+  private service<Cmd, Sub>(Type: ServiceClass<Event, Cmd, Sub>): Service<Cmd, Sub> {
     for (let i = 0; i < this.services.length; i++) {
       const service = this.services[i];
       if (service.type === Type) {
@@ -90,7 +90,7 @@ const emptySubscriptions = <State>(_: State) => [];
 export interface Options<State, Event> {
   readonly init: Init<State, Event>;
   readonly update: Update<State, Event>;
-  readonly subscriptions?: (state: State) => ReadonlyArray<Subscription<Event>>;
+  readonly subscriptions?: (state: State) => ReadonlyArray<Subscription<Event, any>>;
 }
 
 export type Init<State, Event> = () => UpdateResult<State, Event>;
@@ -99,26 +99,26 @@ export type Notify<Event> = (event: Event) => void;
 
 export interface UpdateResult<State, Event> {
   readonly state: State;
-  readonly commands?: ReadonlyArray<Command<Event>>;
+  readonly commands?: ReadonlyArray<Command<Event, any>>;
 }
 
 //// Service
 
-export interface Service {
-  handleCommand(command: any): void;
-  updateSubscriptions(subscriptions: ReadonlyArray<any>): void;
+export interface Service<Cmd, Sub> {
+  handleCommand(command: Cmd): void;
+  updateSubscriptions(subscriptions: ReadonlyArray<Sub>): void;
 }
 
-export interface ServiceClass<Event> {
-  new(notify: Notify<Event>): Service
+export interface ServiceClass<Event, Cmd, Sub> {
+  new(notify: Notify<Event>): Service<Cmd, Sub>
 }
 
-export interface Command<Event> {
-  service: ServiceClass<Event>;
-  command: any;
+export interface Command<Event, Cmd> {
+  service: ServiceClass<Event, Cmd, any>;
+  command: Cmd;
 }
 
-export interface Subscription<Event> {
-  service: ServiceClass<Event>;
-  subscription: any;
+export interface Subscription<Event, Sub> {
+  service: ServiceClass<Event, any, Sub>;
+  subscription: Sub;
 }
