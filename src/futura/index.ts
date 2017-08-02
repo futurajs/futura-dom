@@ -50,7 +50,7 @@ class Services<Event> {
   public handleCommands(commands: ReadonlyArray<Command<Event>>) {
     commands.forEach((command) => {
       const service = this.service(command.service);
-      service.handleCommand(command.desc);
+      service.handleCommand(command.command);
     });
   }
 
@@ -63,8 +63,8 @@ class Services<Event> {
     this.services.forEach((service) => {
       const serviceSubscriptions = subscriptions.filter((subscription) =>
         subscription.service === service.type);
-      
-        service.instance.updateSubscriptions(serviceSubscriptions);
+
+      service.instance.updateSubscriptions(serviceSubscriptions.map((s) => s.subscription));
     });
   }
 
@@ -115,12 +115,10 @@ export interface ServiceClass<Event> {
 
 export interface Command<Event> {
   service: ServiceClass<Event>;
-  desc: any;
-  // map<OtherEvent>(func: (event: Event) => OtherEvent): Subscription<OtherEvent>;
+  command: any;
 }
 
 export interface Subscription<Event> {
   service: ServiceClass<Event>;
-  desc: any;
-  // map<OtherEvent>(func: (event: Event) => OtherEvent): Subscription<OtherEvent>;
+  subscription: any;
 }
