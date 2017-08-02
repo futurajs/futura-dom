@@ -20,6 +20,7 @@ export class DomProgram<State, Event> extends Program<State, Event> {
 
 // Types
 
-export { Init, Update, Notify } from './futura';
-
 export type View<State, Event> = (state: State, notify: Notify<Event>) => VNode;
+
+export { Init, Notify, Update } from './futura';
+export { Command, Service, Subscription } from './futura';
