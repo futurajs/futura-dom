@@ -15,5 +15,9 @@ export {
 } from 'mostly-dom';
 
 export {
+  h
+} from 'mostly-dom';
+
+export {
   VNode
 } from './types';

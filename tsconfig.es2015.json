@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declarationDir": "./lib.es2015/typings",
+    "lib": [ "dom", "es5", "es2015" ],
+    "module": "es2015",
+    "outDir": "./lib.es2015",
+    "target": "es2015"
+  }
+}

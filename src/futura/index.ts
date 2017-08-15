@@ -1,36 +1,42 @@
 import { Signal, Value } from './rx';
 
-export const program = <State, Event>(options: Options<State, Event>) =>
+export const program = <State, Message>(options: Options<State, Message>) =>
   new Program(options);
 
 // Helpers
 
-export class Program<State, Event> {
+export class Program<State, Message> {
   private readonly state$: Value<State>;
-  private readonly event$: Signal<Event>;
-  private readonly services: Services<Event>;
+  private readonly message$: Signal<Message>;
 
-  constructor(options: Options<State, Event>) {
-    const { init, update, subscriptions = emptySubscriptions } = options;
-    const { state, commands = [] } = init();
+  private init: boolean;
+  private initMessages: Array<Message>;
 
-    this.state$ = new Value(state);
-    this.event$ = new Signal<Event>();
-    this.services = new Services(this.update);
+  constructor(options: Options<State, Message>) {
+    const { init, update } = options;
 
-    this.event$.subscribe((event) => {
-      const { state, commands = [] } = update(this.state$.value, event);
+    this.init = true;
+    this.initMessages = [];
 
-      this.state$.value = state;
-      this.services.handleCommands(commands);
-      this.services.updateSubscriptions(subscriptions(state));
+    this.message$ = new Signal<Message>();
+    this.message$.subscribe((message) => {
+      this.state$.value = update(this.state$.value, message);
     });
-    this.services.handleCommands(commands);
-    this.services.updateSubscriptions(subscriptions(state));
+
+    this.state$ = new Value(init(this.update));
+
+    // Init done
+    this.init = false;
+    this.initMessages.forEach((message) => this.message$.emit(message));
+    this.initMessages = [];
   }
 
-  protected update = (event: Event) => {
-    this.event$.emit(event);
+  protected update = (message: Message) => {
+    if (this.init) {
+      this.initMessages.push(message);
+    } else {
+      this.message$.emit(message);
+    }
   }
 
   protected observe = (observer: (state: State) => void) => {
@@ -38,87 +44,13 @@ export class Program<State, Event> {
   }
 }
 
-class Services<Event> {
-  private readonly services: Array<{ type: ServiceClass<Event, any, any>, instance: Service<any, any> }>;
-  private readonly notify: Notify<Event>;
-
-  constructor(notify: Notify<Event>) {
-    this.services = [];
-    this.notify = notify;
-  }
-
-  public handleCommands(commands: ReadonlyArray<Command<Event, any>>) {
-    commands.forEach((command) => {
-      const service = this.service(command.service);
-      service.handleCommand(command.command);
-    });
-  }
-
-  public updateSubscriptions(subscriptions: ReadonlyArray<Subscription<Event, any>>) {
-    // Ensure all services are setup
-    subscriptions.forEach((subscription) => {
-      this.service(subscription.service);
-    });
-    // For each service update their subscriptions
-    this.services.forEach((service) => {
-      const serviceSubscriptions = subscriptions.filter((subscription) =>
-        subscription.service === service.type);
-
-      service.instance.updateSubscriptions(serviceSubscriptions.map((s) => s.subscription));
-    });
-  }
-
-  private service<Cmd, Sub>(Type: ServiceClass<Event, Cmd, Sub>): Service<Cmd, Sub> {
-    for (let i = 0; i < this.services.length; i++) {
-      const service = this.services[i];
-      if (service.type === Type) {
-        return service.instance;
-      }
-    }
-    const service = new Type(this.notify);
-    this.services.push({ type: Type, instance: service });
-    return service;
-  }
-}
-
-const emptySubscriptions = <State>(_: State) => [];
-
 // Types
 
-//// Options
-
-export interface Options<State, Event> {
-  readonly init: Init<State, Event>;
-  readonly update: Update<State, Event>;
-  readonly subscriptions?: (state: State) => ReadonlyArray<Subscription<Event, any>>;
+export interface Options<State, Message> {
+  readonly init: Init<State, Message>;
+  readonly update: Update<State, Message>;
 }
 
-export type Init<State, Event> = () => UpdateResult<State, Event>;
-export type Update<State, Event> = (state: State, event: Event) => UpdateResult<State, Event>;
-export type Notify<Event> = (event: Event) => void;
-
-export interface UpdateResult<State, Event> {
-  readonly state: State;
-  readonly commands?: ReadonlyArray<Command<Event, any>>;
-}
-
-//// Service
-
-export interface Service<Cmd, Sub> {
-  handleCommand(command: Cmd): void;
-  updateSubscriptions(subscriptions: ReadonlyArray<Sub>): void;
-}
-
-export interface ServiceClass<Event, Cmd, Sub> {
-  new(notify: Notify<Event>): Service<Cmd, Sub>
-}
-
-export interface Command<Event, Cmd> {
-  service: ServiceClass<Event, Cmd, any>;
-  command: Cmd;
-}
-
-export interface Subscription<Event, Sub> {
-  service: ServiceClass<Event, any, Sub>;
-  subscription: Sub;
-}
+export type Init<State, Message> = (dispatch: Dispatch<Message>) => State;
+export type Update<State, Message> = (state: State, message: Message) => State;
+export type Dispatch<Message> = (message: Message) => void;

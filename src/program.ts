@@ -1,14 +1,14 @@
 import { Renderer } from './dom/renderer';
 import { VNode } from './dom/types';
-import { Notify, Options, Program } from './futura';
+import { Dispatch, Options, Program as BaseProgram } from './futura';
 
-export const program = <State, Event>(options: Options<State, Event>) =>
-  new DomProgram(options);
+export const program = <State, Message>(options: Options<State, Message>) =>
+  new Program(options);
 
 // Helpers
 
-export class DomProgram<State, Event> extends Program<State, Event> {
-  public embed(root: Element, view: View<State, Event>) {
+export class Program<State, Message> extends BaseProgram<State, Message> {
+  public embed(root: Element, view: View<State, Message>) {
     const container = root.appendChild(document.createElement('div'));
     const renderer = new Renderer(container);
 
@@ -20,7 +20,6 @@ export class DomProgram<State, Event> extends Program<State, Event> {
 
 // Types
 
-export type View<State, Event> = (state: State, notify: Notify<Event>) => VNode;
+export type View<State, Message> = (state: State, dispatch: Dispatch<Message>) => VNode;
 
-export { Init, Notify, Update } from './futura';
-export { Command, Service, Subscription } from './futura';
+export { Init, Dispatch, Update } from './futura';
