@@ -22,14 +22,14 @@ export class Renderer {
   private vnode1: VNode;
   private refreshScheduled: boolean = false;
 
-  constructor(container: Node, vnode: VNode | null | undefined) {
+  constructor(container: Node, vnode: VNode) {
     this.vnode0 = vnode;
     this.vnode1 = vnode;
 
     patch(<any>container, vnode);
   }
 
-  render(vnode: VNode | null | undefined) {
+  render(vnode: VNode) {
     this.vnode1 = vnode;
     if (!this.refreshScheduled) {
         this.refreshScheduled = true;

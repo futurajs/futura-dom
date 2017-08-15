@@ -27,7 +27,7 @@ export interface Notify<Events> {
 }
 
 export interface View<State, Events> {
-  (state: State, notify: Notify<Events>): VNode | null | undefined;
+  (state: State, notify: Notify<Events>): VNode;
 }
 
 export interface StateInit<State, Services> {
