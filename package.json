@@ -42,10 +42,10 @@
   },
   "homepage": "https://github.com/futurajs/futura-dom",
   "dependencies": {
-    "mostly-dom": "^3.6.0"
+    "mostly-dom": "^4.0.0"
   },
   "devDependencies": {
     "rimraf": "^2.6.1",
-    "typescript": "^2.3.4"
+    "typescript": "^2.5.1"
   }
 }
