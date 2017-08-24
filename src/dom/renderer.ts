@@ -34,4 +34,4 @@ export class Renderer {
 
 // Internals
 
-const patch = init([]);
+const patch = init();
