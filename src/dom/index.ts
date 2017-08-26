@@ -19,5 +19,9 @@ export {
 } from 'mostly-dom';
 
 export {
+  svg
+} from 'mostly-dom';
+
+export {
   VNode
 } from './types';
