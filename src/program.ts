@@ -8,8 +8,7 @@ export const program = <State, Message>(options: Options<State, Message>) =>
 // Helpers
 
 export class Program<State, Message> extends BaseProgram<State, Message> {
-  public embed(root: Element, view: View<State, Message>) {
-    const container = root.appendChild(document.createElement('div'));
+  public embed(container: Element, view: View<State, Message>) {
     const renderer = new Renderer(container);
 
     this.observe((state: State) => {
