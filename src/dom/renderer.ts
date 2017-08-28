@@ -1,37 +1,44 @@
-import { elementToVNode, init } from 'mostly-dom';
-import { ElementVNode } from 'mostly-dom';
+import { init } from 'snabbdom';
+import { VNode } from 'snabbdom/vnode';
 
-import { VNode } from './types';
+import attributes from 'snabbdom/modules/attributes';
+import eventListeners from 'snabbdom/modules/eventlisteners';
+import props from 'snabbdom/modules/props';
+import style from 'snabbdom/modules/style';
 
 export class Renderer {
-  private vnode0: ElementVNode;
-  private vnode1: VNode | null;
-  private refreshScheduled: boolean = false;
+  private node: Element | VNode;
+  private view?: View;
 
-  constructor(container: Element, vnode: VNode | null = null) {
-    this.vnode0 = elementToVNode(container);
-    this.vnode1 = vnode;
-
-    this.refresh();
+  constructor(container: Element) {
+    this.node = document.createElement('div');
+    container.appendChild(this.node);
   }
 
-  public render(vnode: VNode) {
-    this.vnode1 = vnode;
-    if (!this.refreshScheduled) {
-        this.refreshScheduled = true;
-        window.requestAnimationFrame(this.refresh);
+  public render(view: View) {
+    if (!this.view) {
+      window.requestAnimationFrame(this.refresh);
     }
+    this.view = view;
   }
 
   private refresh = () => {
-    this.refreshScheduled = false;
-    if (this.vnode1) {
-      this.vnode0 = patch(this.vnode0, this.vnode1);
-      this.vnode1 = null;
+    if (this.view) {
+      patch(this.node, this.view());
+      this.view = undefined;
     }
   }
 }
 
+// Types
+
+export type View = () => VNode;
+
 // Internals
 
-const patch = init();
+const patch = init([
+  attributes,
+  eventListeners,
+  props,
+  style
+]);

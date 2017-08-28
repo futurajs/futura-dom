@@ -13,7 +13,7 @@ export class Program<State, Message> extends BaseProgram<State, Message> {
     const renderer = new Renderer(container);
 
     this.observe((state: State) => {
-      renderer.render(view(state, this.update));
+      renderer.render(() => view(state, this.update));
     });
   }
 }
