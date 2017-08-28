@@ -24,7 +24,7 @@ export class Renderer {
 
   private refresh = () => {
     if (this.view) {
-      patch(this.node, this.view());
+      this.node = patch(this.node, this.view());
       this.view = undefined;
     }
   }
