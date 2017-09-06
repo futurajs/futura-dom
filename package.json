@@ -1,6 +1,6 @@
 {
   "name": "futura-dom",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "DOM implementation for futura",
   "main": "index.js",
   "module": "lib.es2015/index.js",
@@ -22,12 +22,12 @@
   },
   "keywords": [
     "elm",
+    "tea",
     "flux",
     "fsm",
     "futura",
     "redux",
     "state-machine",
-    "tea",
     "ui",
     "virtual-dom",
     "virtual"
@@ -42,11 +42,10 @@
   },
   "homepage": "https://github.com/futurajs/futura-dom",
   "dependencies": {
-    "futura": "0.1.2",
-    "snabbdom": "0.7.0"
+    "snabbdom": "^0.7.0"
   },
   "devDependencies": {
     "rimraf": "^2.6.1",
-    "typescript": "^2.4.2"
+    "typescript": "^2.5.1"
   }
 }
