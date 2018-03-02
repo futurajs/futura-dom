@@ -1,17 +1,18 @@
-import { init } from 'snabbdom';
-import { VNode } from 'snabbdom/vnode';
+import { init } from "snabbdom";
+import { VNode } from "snabbdom/vnode";
 
-import attributes from 'snabbdom/modules/attributes';
-import eventListeners from 'snabbdom/modules/eventlisteners';
-import props from 'snabbdom/modules/props';
-import style from 'snabbdom/modules/style';
+import attributes from "snabbdom/modules/attributes";
+import eventListeners from "snabbdom/modules/eventlisteners";
+import props from "snabbdom/modules/props";
+import style from "snabbdom/modules/style";
+
 
 export class Renderer {
   private node: Element | VNode;
   private view?: View;
 
   constructor(container: Element) {
-    this.node = document.createElement('div');
+    this.node = document.createElement("div");
     container.appendChild(this.node);
   }
 
@@ -30,15 +31,17 @@ export class Renderer {
   }
 }
 
-// Types
+
+/** Types */
 
 export type View = () => VNode;
 
-// Internals
+
+/** Internals */
 
 const patch = init([
   attributes,
   eventListeners,
   props,
-  style
+  style,
 ]);

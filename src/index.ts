@@ -1,2 +1,2 @@
-export * from './dom';
-export * from './program';
+export * from "./dom";
+export * from "./program";

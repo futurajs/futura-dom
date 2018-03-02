@@ -1,1 +1,1 @@
-export { VNode } from 'snabbdom/vnode';
+export { VNode } from "snabbdom/vnode";

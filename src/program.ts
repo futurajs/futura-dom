@@ -1,13 +1,13 @@
-import { Renderer } from './dom/renderer';
-import { VNode } from './dom/types';
-import { Dispatch, Options, Program as BaseProgram } from './futura';
+import { Dispatch, Program } from "futura";
 
-export const program = <State, Message>(options: Options<State, Message>) =>
-  new Program(options);
+import { Renderer } from "./dom/renderer";
+import { VNode } from "./dom/types";
 
-// Helpers
 
-export class Program<State, Message> extends BaseProgram<State, Message> {
+export const program = <State, Message>(options: Program.Options<State, Message>) =>
+  new DOMProgram(options);
+
+export class DOMProgram<State, Message> extends Program<State, Message> {
   public embed(container: Element, view: View<State, Message>) {
     const renderer = new Renderer(container);
 
@@ -17,8 +17,7 @@ export class Program<State, Message> extends BaseProgram<State, Message> {
   }
 }
 
-// Types
+
+/** Types */
 
 export type View<State, Message> = (state: State, dispatch: Dispatch<Message>) => VNode;
-
-export { Init, Dispatch, Update } from './futura';
