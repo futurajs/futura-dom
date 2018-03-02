@@ -43,7 +43,7 @@
   },
   "homepage": "https://github.com/futurajs/futura-dom",
   "dependencies": {
-    "futura": "github:futurajs/futura#37cd3cb9b2eae9fb8cac21f7100c5e4e29d831c6",
+    "futura": "github:futurajs/futura#cdb81ffa7c754270f0aaae84e434af6428f197c3",
     "snabbdom": "^0.7.1"
   },
   "devDependencies": {
